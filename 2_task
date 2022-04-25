@@ -1,0 +1,65 @@
+#include <iostream>
+using namespace std;
+class rational
+{
+private:
+	int n = 1; // NOMIRATOR
+	int d = 1; // DENOMINATOR
+public:
+	rational(int n = 1, int d = 1) {
+		this->n = n;
+		if (d != 0) this->d = d; //проверка на неравенсвто нулю знаменателя 
+		reduce(this->n, this->d);
+	}
+	int get_num() { return n; }
+		int get_den() { return d; }
+		void set_num(int k) { n=k; }
+		void set_den(int m) { d=m; }
+
+	rational(const rational& c) {
+		this->n = c.n;
+		this->d = c.d;
+		cout << "Copy constructor"<< endl;
+	}
+	rational& operator=(rational& c) {
+		this->n = c.n;
+		this->d = c.d;
+		return *this;
+	}
+	int operator==(rational& c) {
+		return (n * c.d) == (d * c.n);
+	}
+	int operator!=(rational& c) {
+		return (n * c.d) != (d * c.n);
+	}
+	rational& operator*(rational& c) {
+		this->n = n * c.n;
+		this->d = d * c.d;
+		reduce(this->n, this->d);
+		return *this;
+	}
+	rational& operator/(rational& c) {
+		this->n = n * c.d;
+		this->d = d * c.n;
+		reduce(this->n, this->d);
+		return *this;
+	}
+	void reduce(int& a, int& b) {
+		 a = n;
+		 b = d;
+		while ((a > 0) && (b > 0)) {
+			if (a > b) a = a % b;
+			else b = b % a;
+		}
+		n /= (a + b);
+		d /= (a + b);
+	}
+	friend ostream& operator<<(ostream& stream, rational& c) {
+		stream<< "Rational "<< c.n<< "/"<< c.d << " ";
+		return stream;
+	}
+	friend istream& operator>>(istream& stream, rational& c) {
+		stream >>c.n>> c.d;
+		return stream;
+	}
+};
